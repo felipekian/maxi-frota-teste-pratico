@@ -57,9 +57,9 @@ class UserController extends Controller
         return response()->json(['login' => 'false', 'message' => 'Usuário autenticado']);
     }
 
-    public function userDataResponse(Request $request, $email_hash_md5)
+    public function userDataResponse($email_hash_md5)
     {
-        $user = User::firstWhere('email_hash', $email_hash_md5)->select(['name', 'username', 'email']);
+        $user = User::select(['name', 'username', 'email'])->where('email_hash_md5', $email_hash_md5)->get();
 
         if (!$user) {
             return  response()->json([
