@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -15,7 +16,7 @@ class UserController extends Controller
     {
         $user = User::where('username', $request->username)->whereOr('email', $request->email)->first();
 
-        if($user){
+        if ($user) {
             return response()->json([
                 'created' => 'false',
                 'message' => 'usuário já existe',
@@ -27,8 +28,9 @@ class UserController extends Controller
         $user->username = $request->username;
         $user->email = $request->email;
         $user->email_hash_md5 = md5($request->email);
-        $user->password = md5($request->password);
+        $user->password = Hash::make($request->password);
         $user->save();
+
 
         /**
          * falta enviar o email
@@ -46,18 +48,30 @@ class UserController extends Controller
     // route-> localhost:8000/api/logar
     public function login(LoginRequest $request)
     {
-        $user = User::where('username', $request->username)->first();
+        $user = User::where('username', $request->username)->get();
 
-        if(!$user || (md5($request->password) !== $user->password)){
-            return response()->json([
-                'login' => 'false',
-                'message' => 'Usuário e/ou senha não conferem',
+        if (!$user || !Auth::attemp(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json(['login' => 'false', 'message' => 'Usuário e/ou senha não conferem']);
+        }
+
+        return response()->json(['login' => 'false', 'message' => 'Usuário autenticado']);
+    }
+
+    public function userDataResponse(Request $request, $email_hash_md5)
+    {
+        $user = User::select(['name', 'username', 'email'])->where('email_hash', $email_hash_md5);
+
+        if (!$user) {
+            return  response()->json([
+                'user_data_status' => false,
+                'message' => 'Usuário não encontrado'
             ]);
         }
 
-        return response()->json([
-            'login' => 'false',
-            'message' => 'Usuário autenticado',
+        return  response()->json([
+            'user_data_status' => true,
+            'message' => 'Usuário encontrado com sucesso',
+            'user' => $user
         ]);
     }
 }

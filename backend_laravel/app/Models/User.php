@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'username',
         'email',
+        'email_hash_md5',
         'password',
     ];
 
