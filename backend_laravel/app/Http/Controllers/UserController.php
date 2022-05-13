@@ -59,7 +59,7 @@ class UserController extends Controller
 
     public function userDataResponse(Request $request, $email_hash_md5)
     {
-        $user = User::select(['name', 'username', 'email'])->where('email_hash', $email_hash_md5);
+        $user = User::firstWhere('email_hash', $email_hash_md5)->select(['name', 'username', 'email']);
 
         if (!$user) {
             return  response()->json([
