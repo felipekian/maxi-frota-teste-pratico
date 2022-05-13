@@ -14,7 +14,9 @@ class UserController extends Controller
     // route-> localhost:8000/api/criar-usuario
     public function store(StoreUserRequest $request)
     {
-        $user = User::where('username', $request->username)->whereOr('email', $request->email)->first();
+        $user = User::where('username', $request->username)
+            ->whereOr('email', $request->email)
+            ->first();
 
         if ($user) {
             return response()->json([
@@ -48,9 +50,9 @@ class UserController extends Controller
     // route-> localhost:8000/api/logar
     public function login(LoginRequest $request)
     {
-        $user = User::where('username', $request->username)->get();
+        $user = User::where('email', $request->email)->get();
 
-        if (!$user || !Auth::attemp(['email' => $request->email, 'password' => $request->password])) {
+        if (!$user || !Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return response()->json(['login' => 'false', 'message' => 'Usuário e/ou senha não conferem']);
         }
 
