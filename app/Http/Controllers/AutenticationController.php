@@ -15,7 +15,7 @@ class AutenticationController extends Controller
 
     public function login(LoginRequest $request)
     {
-        if (Auth::guard('web')->attempt($request->except('_token'), true)) {
+        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], true)) {
             return redirect()->route('site.dashboard.index')->with([
                 'alerta' => 'success',
                 'mensagem' => 'Logado com sucesso',
@@ -24,7 +24,7 @@ class AutenticationController extends Controller
 
         return back()->with([
             'alerta' => 'danger',
-            'mensagem' => 'username/password not found',
+            'mensagem' => 'email ou password not found',
         ])->withInput();
     }
 }

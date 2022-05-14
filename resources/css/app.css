@@ -6,3 +6,7 @@
 .error {
     color: red;
 }
+
+.section-data-user{
+    max-width: 500px;
+}
