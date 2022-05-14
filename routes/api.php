@@ -18,8 +18,3 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-
-Route::post('/criar-usuario', [UserController::class, 'store']);
-Route::post('/logar', [UserController::class, 'login']);
-Route::get('/pegar-dados-usuario/{email_hash_md5}', [UserController::class, 'userDataResponse']);

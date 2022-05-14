@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AutenticationController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    dd('somente api');
-});
+Route::get('/', [AutenticationController::class, 'index'])->name('site.auth.index');
+Route::post('/logar', [AutenticationController::class, 'login'])->name('site.auth.login');
+
+Route::get('/create-account', [UserController::class, 'index'])->name('site.user.index');
+Route::post('/create-account-user', [UserController::class, 'store'])->name('site.user.store');
