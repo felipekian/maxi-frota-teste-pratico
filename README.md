@@ -1,4 +1,4 @@
-# Maxi Frotas teste prático
+# Maxi Frota teste prático
 
 ## Ferramentas a serem baixar e instaladas
 
