@@ -18,13 +18,13 @@ class AutenticationController extends Controller
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], true)) {
             return redirect()->route('site.dashboard.index')->with([
                 'alerta' => 'success',
-                'mensagem' => 'Logado com sucesso',
+                'mensagem' => 'successfully logged in',
             ]);
         }
 
         return back()->with([
             'alerta' => 'danger',
-            'mensagem' => 'email ou password not found',
+            'mensagem' => 'email or password do not match',
         ])->withInput();
     }
 }

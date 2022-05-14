@@ -1,1 +1,17 @@
-.my-form-center{margin:0 auto;max-width:450px}.error{color:red}.section-data-user{max-width:500px}
+.my-form-center {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.error {
+    color: red;
+}
+
+.section-data-user{
+    max-width: 500px;
+}
+
+.img-size{
+    max-width: 350px;
+}
+

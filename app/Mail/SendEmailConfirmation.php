@@ -31,7 +31,7 @@ class SendEmailConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->subject(env('APP_NAME') . ' - Valide seu email')
+        return $this->subject(env('APP_NAME') . ' - Validate your email')
             ->view('emails.validarEmail')
             ->with([
                 'user' => $this->user,

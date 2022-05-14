@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthMiddleware
+class AuthMiddlewareNotAuth
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,8 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()) {
-            return redirect()->route('site.dashboard.index');
+        if (!Auth::user()) {
+            return redirect()->route('site.auth.index');
         }
 
         return $next($request);

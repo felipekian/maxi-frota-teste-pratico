@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Mail\SendEmailConfirmation;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
@@ -46,7 +43,7 @@ class UserController extends Controller
         if(!$user){
             return redirect()->route('site.auth.index')->with([
                 'alert' => 'danger',
-                'message' => 'Usuário não encontrado'
+                'message' => 'User not found'
             ]);
         }
 
@@ -58,7 +55,7 @@ class UserController extends Controller
             'user' => $user
         ])->with([
             'alert' => 'success',
-            'message' => 'Email validado com sucesso',
+            'message' => 'Email successfully validated',
         ]);
     }
 }
