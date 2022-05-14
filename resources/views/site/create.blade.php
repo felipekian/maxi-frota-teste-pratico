@@ -8,11 +8,54 @@
 
 @push('scripts')
     <script>
-        $(".btn_show_password").click(function() {
-            let input_senha = $("#password");
-            input_senha.attr('type') == "text" ? input_senha.attr('type', 'password') : input_senha.attr('type',
-                'text');
-        });
+        $(document).ready(function() {
+            $(".btn_show_password").click(function() {
+                let input_senha = $("#password");
+                input_senha.attr('type') == "text" ? input_senha.attr('type', 'password') : input_senha
+                    .attr('type',
+                        'text');
+            });
+
+            $('#password').keyup(function() {
+                let pass = $('#password').val()
+
+                let confirm = {
+                    'upper': false,
+                    'lower': false,
+                    'special': false,
+                    'number': false,
+                    'length': pass.length >= 6 ? true : false,
+                };
+
+                for (let i = 0; i < pass.length; i++) {
+                    const element = pass[i];
+
+                    if (element >= 'a' && element <= 'z') {
+                        confirm.lower = true;
+                    } else if (element >= 'A' && element <= 'Z') {
+                        confirm.upper = true;
+                    } else if (element >= '0' && element <= '9') {
+                        confirm.number = true;
+                    } else if (element == '!' || element == '@' || element == '#' || element == '$' ||
+                        element == '%' || element == '&') {
+                        confirm.special = true;
+                    }
+                }
+
+                const html_new = `
+                    <div class="pt-3 d-flex justify-content-between">
+                        <span class="${confirm.upper ? 'text-success':'text-danger'}">Uppercase </span>|
+                        <span class="${confirm.lower ? 'text-success':'text-danger'}">Lowercase </span>|
+                        <span class="${confirm.special ? 'text-success':'text-danger'}">Special </span>|
+                        <span class="${confirm.number ? 'text-success':'text-danger'}">Number </span>|
+                        <span class="${confirm.length ? 'text-success':'text-danger'}">Minimun 6</span>
+                    </div>
+                `;
+
+                $('#div-pass-info').html('').html(html_new);
+
+            })
+        })
     </script>
 @endpush
 
@@ -54,8 +97,10 @@
                 <div class="input-group">
                     <input type="password" class="form-control" name="password" id="password"
                         value="{{ old('password') }}">
-                    <button class="btn btn-outline-secondary btn_show_password" type="button"><i class="bi bi-eye"></i></button>
+                    <button class="btn btn-outline-secondary btn_show_password" type="button"><i
+                            class="bi bi-eye"></i></button>
                 </div>
+                <div id="div-pass-info"></div>
                 @error('password')
                     <small class="error">{{ $message }}</small>
                 @enderror
