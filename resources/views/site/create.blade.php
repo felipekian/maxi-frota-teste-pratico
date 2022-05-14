@@ -55,6 +55,55 @@
                 $('#div-pass-info').html('').html(html_new);
 
             })
+
+            $('#form').submit(function() {
+                let pass = $('#password').val()
+
+                let confirm = {
+                    'upper': false,
+                    'lower': false,
+                    'special': false,
+                    'number': false,
+                    'length': pass.length >= 6 ? true : false,
+                };
+
+                for (let i = 0; i < pass.length; i++) {
+                    const element = pass[i];
+
+                    if (element >= 'a' && element <= 'z') {
+                        confirm.lower = true;
+                    } else if (element >= 'A' && element <= 'Z') {
+                        confirm.upper = true;
+                    } else if (element >= '0' && element <= '9') {
+                        confirm.number = true;
+                    } else if (element == '!' || element == '@' || element == '#' || element == '$' ||
+                        element == '%' || element == '&') {
+                        confirm.special = true;
+                    }
+                }
+
+                if (!confirm.lower ||
+                    !confirm.upper ||
+                    !confirm.number ||
+                    !confirm.special ||
+                    !confirm.length
+                ) {
+                    const html_new = `
+                    <div class="pt-3 d-flex justify-content-between">
+                        <span class="${confirm.upper ? 'text-success':'text-danger'}">Uppercase </span>|
+                        <span class="${confirm.lower ? 'text-success':'text-danger'}">Lowercase </span>|
+                        <span class="${confirm.special ? 'text-success':'text-danger'}">Special </span>|
+                        <span class="${confirm.number ? 'text-success':'text-danger'}">Number </span>|
+                        <span class="${confirm.length ? 'text-success':'text-danger'}">Minimun 6</span>
+                    </div>
+                `;
+
+                $('#div-pass-info').html('').html(html_new);
+                    $.notify("Password invalid", "error");
+                    return false;
+                }
+
+            })
         })
     </script>
 @endpush
@@ -66,7 +115,8 @@
     @include('components.title')
     @include('components.alert')
 
-    <form class="my-form-center shadow-sm border rounded p-3 mt-5" method="post" action="{{ route('site.user.store') }}">
+    <form id="form" class="my-form-center shadow-sm border rounded p-3 mt-5" method="post"
+        action="{{ route('site.user.store') }}">
 
         @csrf
 
